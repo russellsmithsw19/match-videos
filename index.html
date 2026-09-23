@@ -21,7 +21,7 @@
       note; write \" instead, or use ' (apostrophe) freely.
    ===================================================================== */
 const PAGE_TITLE = "Video Feedback    7Wells vs Horsham/Crowborough/Haywards Heath    20/09/26";
-const PAGE_INTRO = "Enjoy each clip and read the coach's notes underneath.";
+const PAGE_INTRO = "Watch each clip and read the coach's notes underneath.";
 
 const CLIPS = [
   {
@@ -82,22 +82,22 @@ const CLIPS = [
   {
     file: "Rosie-run-then-Sydney-try.mp4",
     title: "Great run as usual from Rosie - then excellent run from depth from Sydney. take it at pace - its hard to stop!",
-    note: "xxxxxx"
+    note: ""
   },
   {
     file: "Sydney.mp4",
     title: "Fantastic kick, straighter next time!",
-    note: "xxxxxx"
+    note: ""
+  },
+  {
+    file: "Sydney-2.mp4",
+    title: "Fantastic kick, that's better!",
+    note: ""
   },
   {
     file: "Mary-long-try.mp4",
     title: "Long range try from Mary",
     note: "Excellent work.  And lots of suport runners too in case of trouble - excellent work all round!  The run against the flow of play is what started it off. "
-  },
-  {
-    file: "Sydney-2.mp4",
-    title: "Fantastic kick, that's better!",
-    note: "xxxxxx"
   },
   {
     file: "maya-tackle.mp4",
@@ -119,6 +119,7 @@ const CLIPS = [
     title: "Nice switch!",
     note: "A planned move which caught the oppo on the hop. Z could have gone more directly and looked left for Maisie for a certian try! Let's practice this."
   }
+
 ];
 /* ===================================================================== */
 </script>
@@ -213,7 +214,11 @@ body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.55 "Barlow",syst
     v.controls = true; v.playsInline = true; v.preload = "metadata";
     v.setAttribute("playsinline", "");
     v.src = "videos/" + encodeURIComponent(c.file);
-    v.onerror = () => { p.innerHTML = '<div class="empty">This video could not be loaded. Check that "videos/' + c.file.replace(/</g,"&lt;") + '" exists.</div>'; };
+    let triedRoot = false;
+    v.onerror = () => {
+      if (!triedRoot) { triedRoot = true; v.src = encodeURIComponent(c.file); return; }
+      p.innerHTML = '<div class="empty">This video could not be loaded. Check that "' + c.file.replace(/</g,"&lt;") + '" is uploaded, and that the name matches exactly, including capital letters.</div>';
+    };
     p.appendChild(v);
     $("nowTitle").textContent = c.title || "Untitled clip";
     const has = !!(c.note && c.note.trim());
